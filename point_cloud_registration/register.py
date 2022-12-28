@@ -100,7 +100,6 @@ def make_normal_tetras(points):
     p = coords - means
     norms = np.linalg.norm(p, axis=(1, 2), keepdims=True)
     return dict(
-        vertices=vertices,
         coords=coords,
         means=means,
         norms=norms,
@@ -119,7 +118,7 @@ def compute_canonical_features(tetras):
 
 def select_tetras(tetras, selection):
     tetras['features'] = tetras['features'][selection, :]
-    tetras['vertices'] = tetras['vertices'][selection, :] 
+    tetras['coords'] = tetras['coords']
     tetras['means'] = tetras['means'][selection, :, :]
     tetras['norms'] = tetras['norms'][selection, :, :]
     tetras['norm_coords'] = tetras['norm_coords'][selection, :, :]
@@ -140,4 +139,5 @@ def match_features(tetras1, tetras2):
 
     distances, matches = tree.query(F2, [1], distance_upper_bound=r)
     distances = distances[:,0]
+
     return distances, matches
