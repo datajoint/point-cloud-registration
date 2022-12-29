@@ -118,7 +118,7 @@ def compute_canonical_features(tetras):
 
 def select_tetras(tetras, selection):
     tetras['features'] = tetras['features'][selection, :]
-    tetras['coords'] = tetras['coords']
+    tetras['coords'] = tetras['coords'][selection, :]
     tetras['means'] = tetras['means'][selection, :, :]
     tetras['norms'] = tetras['norms'][selection, :, :]
     tetras['norm_coords'] = tetras['norm_coords'][selection, :, :]
