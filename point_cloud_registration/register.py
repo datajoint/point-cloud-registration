@@ -55,7 +55,7 @@ def make_tetras(points):
     :return np.array tetras: m x 4 indices of compact tetrahedrons
     """
     RELATIVE_RADIUS = 1.3
-    CUTOFF_QUANTILE = 0.1
+    CUTOFF_QUANTILE = 0.10
     
     tree = spatial.KDTree(points)
 
@@ -77,8 +77,8 @@ def ortho_procrustes(A, B):
 
 def disparity(A, B):
     """
-    :params A, B: - normalized tetrahedrons
-    :return: Frobenius norm of (A - scale * B 
+    :params A, B: normalized tetrahedrons
+    :return: Frobenius norm of the error
     """
     R, scale = ortho_procrustes(A, B)
     return np.square(A - scale * B @ R.T).sum()
@@ -131,13 +131,10 @@ def remove_common_tetras(tetras, max_density_threshold=0.2):
     
 
 def match_features(tetras1, tetras2):
-    F1 = tetras1['features']
-    F2 = tetras2['features']
-    tree = spatial.KDTree(F1)
-    d4, _ = tree.query(F2, [1])
-    r = 1.1 * np.quantile(d4, 0.2)
-
-    distances, matches = tree.query(F2, [1], distance_upper_bound=r)
+    tree = spatial.KDTree(tetras1['features'])
+    d4, _ = tree.query(tetras2['features'], [1])
+    distances, matches = tree.query(
+        tetras2['features'], [1],
+        distance_upper_bound=1.1 * np.quantile(d4, 0.2))
     distances = distances[:,0]
-
     return distances, matches
