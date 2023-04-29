@@ -165,7 +165,4 @@ def match_features(tetras1, tetras2):
     distances, matches = tree.query(
         tetras2['features'], [1],
         distance_upper_bound=1.1 * np.quantile(d, 0.2))
-    distances = distances[:,0]
-    return distances, matches
-
-
+    return distances[:,0], matches[:,0]
